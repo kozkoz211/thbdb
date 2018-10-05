@@ -407,9 +407,15 @@ gboolean thbdb_basicimpl_handler_get_keys_by_position (thbdbBasicIf * iface, thb
 
   int ret = THBDB_NORMAL;
   int returnValue = FALSE;
+  bdbKeyList* lst = NULL;
+  int* cnt = 0;
 
   /* getKeys*/
-  ret = get_keys_from_bdb( position, size, *_return );
+  ret = get_keys_from_bdb( position, size, lst, cnt );
+
+  _return->__isset_numOfKeys = TRUE;
+  _return->__isset_key = TRUE;
+  _return->numOfKeys = cnt; 
 
   if( ret != THBDB_NORMAL ){
     g_set_error(
@@ -423,6 +429,30 @@ gboolean thbdb_basicimpl_handler_get_keys_by_position (thbdbBasicIf * iface, thb
     returnValue = TRUE;
   }
   return returnValue;
+}
+
+
+/**
+ * Returns( GPtrArray* ) NULL if no item, non-null if a key exist in ThBDB.
+ * 
+ * parameters
+ * 1: ary     : Array for key.
+ * 2: lst     : List for temporary.
+ */
+GPtrArray* copy_bdbkey_list( GPtrArray* ary, bdbKeyList* lst ){
+
+  if ( lst == NULL) return NULL;
+
+  if ( ary == NULL ){
+    ary = g_ptr_array_new();
+  }
+
+  g_ptr_array_add( ary, (gpointer)lst->key );
+
+  if ( lst->next != NULL){
+    ary = copy_bdbkey_list( ary, lst->next );
+  }
+  return ary;
 }
 
 /*------------------------------  API Handlers (END)-----------------------------------*/

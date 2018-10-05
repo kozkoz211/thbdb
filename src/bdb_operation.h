@@ -19,6 +19,15 @@ g_thbdb_error_quark (void);
 /** for glib error proc */
 #define G_THBDB_ERROR g_thbdb_error_quark() 
 
+/** Following : Basic struct **/
+
+typedef struct _bdbkeyList bdbKeyList;
+struct _bdbkeyList{
+    char* key;
+    int size;
+    struct bdbKeyList* next;
+} ;
+
 /** Following : Basic operations **/
 
 u_int32_t put_on_bdb( char* key, int key_len, char* value, int value_len);
@@ -31,9 +40,13 @@ u_int32_t exists_on_bdb( char* key,int key_len , int* status );
 
 u_int32_t is_null_bdb( int* status );
 
-u_int32_t get_keys_from_bdb( const int position, const int size, thbdbKeys* _return );
+// u_int32_t get_keys_from_bdb( const int position, const int size, thbdbKeys* _return );
 
 u_int32_t compact_bdb();
+
+u_int32_t get_keys_from_bdb( const int position, const int size, bdbKeyList* _return, int* numOfbdbKeyList );
+
+bdbKeyList* add_bdbkey_list( DBT* src, bdbKeyList* current_lst);
 
 /** Following : Control operations **/
 

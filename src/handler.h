@@ -10,12 +10,19 @@
 #include <thrift/c_glib/processor/thrift_dispatch_processor.h>
 //#include "gen-cglib/thbdb_thbdb_types.h"
 
+#include "bdb_operation.h"
+
 /* --------------------------------------------------------------------- */
 /*         Following: Values returned by handler methods.                */
 /* --------------------------------------------------------------------- */
 #define THBDB_STATUS_DB_RUNNING 1
 #define THBDB_STATUS_DB_NOT_OPEND  2    
 
+/* --------------------------------------------------------------------- */
+/*         Following: Basic Operation methods.                */
+/* --------------------------------------------------------------------- */
+
+GPtrArray* copy_bdbkey_list( GPtrArray* ary, bdbKeyList* lst );
 
 /* --------------------------------------------------------------------- */
 /*         Following: The declareration for GLib                         */
